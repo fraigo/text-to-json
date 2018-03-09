@@ -40,9 +40,9 @@
                     <li class="nav-item">
                     <a class="nav-link {{tab=='array'?'active':''}}" href="#" ng-click="tab='array'">Array</a>
                     </li>
-                    <li class="nav-item">
+                    <!--<li class="nav-item">
                     <a class="nav-link {{tab=='tabs'?'active':''}}" href="#"  ng-click="tab='tabs'">Tab separated</a>
-                    </li>
+                    </li>-->
                 </ul>
             </div>
             
@@ -54,16 +54,16 @@
         </div>
         
         <div class="row m-2" ng-if="tab=='array'">
-            [
-            <div class="col-sm-12 tab-item"><div ng-repeat="line in data">{{line}},</div></div>
-            ]
+            
+            <div class="col-sm-12 tab-item">[<div ng-repeat="line in data"> {{line}},</div>]</div>
+            
         </div>
 
-
+        <!--
         <div class="row m-2" ng-if="tab=='tabs'">
             <div class="col-sm-12 tab-item">{{tabData}}</div>
         </div>
-        
+         -->
 
     </div>
 
@@ -82,7 +82,7 @@
 
     var controller=app.controller("controller",["$scope",function($scope){
         $scope.data=[];
-        $scope.textContent="";
+        $scope.textContent="col1;col2\n123;456\n777;888";
         $scope.pretty=true;
         $scope.tab="json";
 
@@ -103,6 +103,8 @@
             $scope.jsonArray=arrayToJson($scope.data);
             $scope.jsonData=angular.toJson($scope.jsonArray,$scope.pretty);
         }
+
+        $scope.changedText();
         
     }]);
     </script>
