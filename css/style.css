@@ -1,0 +1,18 @@
+
+body{
+	font-size: 16px;
+}
+
+
+.tab-item{
+	box-shadow: 0px 5px 5px #CCC;
+	overflow:auto;
+	font-size:10px;
+	white-space: pre-wrap;
+	font-family:courier !important;
+}
+
+textarea{
+	font-size:10px !important;
+	font-family:courier !important;
+}

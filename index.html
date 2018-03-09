@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Text to JSON Converter</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/style.css" />
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container" ng-app="app" ng-controller="controller">
+
+        <div class="row text-center m-3">
+            <div class="col-sm-12">
+                <input type="file" id="filename" style="display: none" accept=".csv,.txt" onchange="angular.element(this).scope().selectFile(this)">
+                <button type="button" ng-click="openFile()" class="btn btn-info">Load CSV/TXT file</button>
+            </div>
+        </div>
+
+        <div class="row m-2">
+            <div class="col-sm-12">
+                <textarea name="content" placeholder="Paste a CSV/TXT text content" id="content" cols="30" rows="8" ng-model="textContent" ng-change="changedText()" style="white-space:nowrap" class="form-control"></textarea>
+            </div>
+        </div>
+
+        <!--
+        <div class="row m-2">
+            <div class="col-sm-12">
+                <button type="button" onclick="refresh()" class="btn btn-primary">Convert</button>
+            </div>
+        </div>
+        -->
+        <div class="row m-2" >
+            <div class="col-sm-12">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                    <a class="nav-link {{tab=='json'?'active':''}}" href="#" ng-click="tab='json'">JSON</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link {{tab=='array'?'active':''}}" href="#" ng-click="tab='array'">Array</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link {{tab=='tabs'?'active':''}}" href="#"  ng-click="tab='tabs'">Tab separated</a>
+                    </li>
+                </ul>
+            </div>
+            
+        </div>
+
+
+        <div class="row m-2" ng-if="tab=='json'">
+            <div class="col-sm-12 tab-item">{{jsonData}}</div>
+        </div>
+        
+        <div class="row m-2" ng-if="tab=='array'">
+            [
+            <div class="col-sm-12 tab-item"><div ng-repeat="line in data">{{line}},</div></div>
+            ]
+        </div>
+
+
+        <div class="row m-2" ng-if="tab=='tabs'">
+            <div class="col-sm-12 tab-item">{{tabData}}</div>
+        </div>
+        
+
+    </div>
+
+     <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery-slim.min.js"><\/script>')</script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="js/text-to-json.js"></script>
+    <script>
+    
+    var app=angular.module("app",[]);
+
+    var controller=app.controller("controller",["$scope",function($scope){
+        $scope.data=[];
+        $scope.textContent="";
+        $scope.pretty=true;
+        $scope.tab="json";
+
+        $scope.openFile=function(){
+            openFile();
+        }
+
+        $scope.selectFile=function(){
+            selectFile(function(data){
+                $scope.textContent=data;
+                $scope.changedText();
+                $scope.$apply();
+            });
+        }
+
+        $scope.changedText=function(){
+            $scope.data=textToArray($scope.textContent);
+            $scope.jsonArray=arrayToJson($scope.data);
+            $scope.jsonData=angular.toJson($scope.jsonArray,$scope.pretty);
+        }
+        
+    }]);
+    </script>
+
+</body>
+</html>
