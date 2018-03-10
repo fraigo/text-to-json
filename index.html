@@ -71,13 +71,13 @@
         </div>
 
 
-        <div class="row m-2" ng-if="tab=='json'">
-            <div class="col-sm-12 tab-item">{{jsonData}}</div>
+        <div class="row m-2" ng-show="tab=='json'">
+            <div class="col-sm-12 tab-item p-1"><textarea ng-model=jsonData class="form-control" rows="10"></textarea></div>
         </div>
         
-        <div class="row m-2" ng-if="tab=='array'">
+        <div class="row m-2" ng-show="tab=='array'">
             
-            <div class="col-sm-12 tab-item">[<div ng-repeat="line in data"> {{line}},</div>]</div>
+            <div class="col-sm-12 tab-item p-1"><textarea ng-model=arrayData class="form-control" rows="10"></textarea></div>
             
         </div>
 
@@ -103,6 +103,7 @@
     var app=angular.module("app",[]);
 
     var controller=app.controller("controller",["$scope",function($scope){
+        
         $scope.data=[];
         $scope.textContent="col1;col2\n123;456\n777;888";
         $scope.pretty=true;
@@ -123,6 +124,13 @@
         $scope.changedText=function(){
             $scope.data=textToArray($scope.textContent);
             $scope.jsonArray=arrayToJson($scope.data);
+            $scope.arrayData="[\n";
+            $scope.data2=textToArray($scope.textContent.replace(/\"/g,"\\\""));
+            console.log($scope.data2);
+            for(var idx in $scope.data){
+                $scope.arrayData+="  [\""+$scope.data2[idx].join("\",\"")+"\"],\n";
+            }
+            $scope.arrayData+="]";
             $scope.jsonData=angular.toJson($scope.jsonArray,$scope.pretty);
         }
 
