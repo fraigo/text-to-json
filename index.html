@@ -34,10 +34,12 @@
     <div class="container" ng-app="app" ng-controller="controller">
 
         <div class="row text-center m-3">
-            <div class="col-sm-12">
+            <div class="col-sm-3"><big>Text to JSON tool</big></div>
+            <div class="col-sm-6">
                 <input type="file" id="filename" style="display: none" accept=".csv,.txt" onchange="angular.element(this).scope().selectFile(this)">
                 <button type="button" ng-click="openFile()" class="btn btn-info">Load CSV/TXT file</button>
             </div>
+            <div class="col-sm-3"><a href="https://github.com/fraigo/text-to-json/">GitHub Project</a></div>
         </div>
 
         <div class="row m-2">
@@ -62,7 +64,10 @@
                     <li class="nav-item">
                     <a class="nav-link {{tab=='array'?'active':''}}" href="#" ng-click="tab='array'">Array</a>
                     </li>
-                    <!--<li class="nav-item">
+                    <li class="nav-item">
+                        <a class="nav-link {{tab=='code'?'active':''}}" href="#" ng-click="tab='code'">Code template</a>
+                        </li>
+                        <!--<li class="nav-item">
                     <a class="nav-link {{tab=='tabs'?'active':''}}" href="#"  ng-click="tab='tabs'">Tab separated</a>
                     </li>-->
                 </ul>
@@ -78,6 +83,18 @@
         <div class="row m-2" ng-show="tab=='array'">
             
             <div class="col-sm-12 tab-item p-1"><textarea ng-model=arrayData class="form-control" rows="10"></textarea></div>
+            
+        </div>
+
+        <div class="row m-2" ng-show="tab=='code'">
+            
+
+            <div class="col-sm-12 tab-item p-1">
+                <textarea ng-model=templateCode class="form-control" rows="5"></textarea>
+            </div>
+            <div class="col-sm-12 tab-item p-1">
+                <div ng-repeat="line in jsonArray">{{replace(line)}}</div>
+            </div>
             
         </div>
 
@@ -108,6 +125,7 @@
         $scope.textContent="col1;col2\n123;456\n777;888";
         $scope.pretty=true;
         $scope.tab="json";
+        $scope.templateCode="Col 1 is ${col1} , Col 2 is ${col2}";
 
         $scope.openFile=function(){
             openFile();
@@ -132,6 +150,18 @@
             }
             $scope.arrayData+="]";
             $scope.jsonData=angular.toJson($scope.jsonArray,$scope.pretty);
+        }
+
+        $scope.replace=function(line){
+            var code=$scope.templateCode;
+            for(var key in line){
+                code=code.replace("${"+key+"}",line[key]);
+                code=code.replace("${"+key+"}",line[key]);
+            }
+            if ($scope.replacedCode!=code){
+                $scope.replacedCode=code;
+            }
+            return $scope.replacedCode;
         }
 
         $scope.changedText();
