@@ -96,6 +96,7 @@ function getSeparator(line){
     ]
     sep.sort(function(a,b){ return b.cols.length>a.cols.length});
     console.log(sep);
+    console.log("Separator:",sep);
     return sep[0].sep;
     
 }
