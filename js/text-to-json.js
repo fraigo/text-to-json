@@ -94,9 +94,13 @@ function getSeparator(line){
         {sep:";",cols:line.split(";")},
         {sep:",",cols:line.split(",")},
     ]
-    sep.sort(function(a,b){ return b.cols.length>a.cols.length});
+    sep.sort(function(a,b){ 
+	    if (b.cols.length>a.cols.length) return 1;
+	    if (b.cols.length<a.cols.length) return -1;
+	    return 0;
+    });
     console.log(sep);
-    console.log("Separator:",sep);
+    console.log("Separator:",sep[0]);
     return sep[0].sep;
     
 }
