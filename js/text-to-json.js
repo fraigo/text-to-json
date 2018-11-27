@@ -65,7 +65,7 @@ function textToArray(string){
 	var result=[];
     for(var index in lines){
         lines[index]=lines[index].trim();
-        var cols=lines[index].split(sep);
+		var cols=lines[index].split(sep);
         result.push(cols);
     }
 	return result;
@@ -80,7 +80,29 @@ function arrayToJson(array,header){
 	for(var index in tmp){
 		var row={};
 		for(var col in header){
-			row[header[col]]=tmp[index][col];
+			var colname=header[col];
+			var colvalue=tmp[index][col];
+			
+			for(var key in header){
+				var header1=header[key];
+				if (colvalue){
+					colvalue=colvalue.replace("${"+header1+"}",tmp[index][key]);
+				}
+                
+            }
+			if (colvalue=='#row'){
+				colvalue=index*1;
+			}
+			
+			if (colvalue && colvalue.length && colvalue.indexOf('#row+')==0){
+				var parts=colvalue.split('+');
+				colvalue=index*1+parts[1]*1;
+			}
+			if (colname && colname.indexOf('#')==0){
+				colvalue*=1;
+				colname=colname.substring(1);
+			}
+			row[colname]=colvalue;
 		}
 		result.push(row);
 	}
