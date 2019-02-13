@@ -93,7 +93,7 @@
                 <textarea ng-model=templateCode class="form-control" rows="5"></textarea>
             </div>
             <div class="col-sm-12 tab-item p-1">
-                <div ng-repeat="line in jsonArray">{{replace(line)}}</div>
+                <div ng-repeat="(idx,line) in jsonArray">{{replace(line,idx)}}</div>
             </div>
             
         </div>
@@ -152,11 +152,18 @@
             $scope.jsonData=angular.toJson($scope.jsonArray,$scope.pretty);
         }
 
-        $scope.replace=function(line){
+        $scope.replace=function(line,num){
             var code=$scope.templateCode;
+            while (code.indexOf("${#}")!=-1){
+                code=code.replace("${#}",num+1);
+            }
+            while (code.indexOf("${@}")!=-1){
+                code=code.replace("${@}",num);
+            }
             for(var key in line){
-                code=code.replace("${"+key+"}",line[key]);
-                code=code.replace("${"+key+"}",line[key]);
+                while (code.indexOf("${"+key+"}")!=-1){
+                    code=code.replace("${"+key+"}",line[key]);
+                }
             }
             if ($scope.replacedCode!=code){
                 $scope.replacedCode=code;
