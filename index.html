@@ -140,7 +140,7 @@
         }
 
         $scope.changedText=function(){
-            $scope.data=textToArray($scope.textContent);
+            $scope.data=CSVToArray($scope.textContent);
             $scope.jsonArray=arrayToJson($scope.data);
             $scope.arrayData="[\n";
             $scope.data2=textToArray($scope.textContent.replace(/\"/g,"\\\""));
